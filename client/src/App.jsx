@@ -1,74 +1,56 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import EventCard from './components/EventCard';
+import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import CreateEvent from './components/CreateEvent';
 
 function App() {
-  const [events] = useState([
-    { 
-      _id: 1, 
-      title: "Corporate Strategy Summit", 
-      date: "2026-07-15", 
-      location: "Hyderabad Convention Center", 
-      category: "Corporate", 
-      price: "₹25,000", // Updated to Rupees
-      image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=400" 
-    },
-    { 
-      _id: 2, 
-      title: "Tech Innovation Meetup", 
-      date: "2026-08-10", 
-      location: "Bangalore Tech Park", 
-      category: "Tech", 
-      price: "₹12,500", // Updated to Rupees
-      image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400" 
-    },
-    { 
-      _id: 3, 
-      title: "Annual Charity Gala", 
-      date: "2026-09-05", 
-      location: "Chittoor Heritage Hall", 
-      category: "Social", 
-      price: "₹18,000", // Updated to Rupees
-      image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400" 
-    }
-  ]);
-  
-  const [activeCategory, setActiveCategory] = useState("All");
-
-  const HomeDashboard = () => (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
-      <h1>Welcome to the Event Management Dashboard</h1>
-      <p>Managing {events.length} upcoming brand productions</p>
-
-      <div style={{ display: 'flex', gap: '10px', marginTop: '20px', flexWrap: 'wrap' }}>
-        {["All", "Corporate", "Social", "Tech"].map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActiveCategory(cat)}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '20px',
-              border: 'none',
-              cursor: 'pointer',
-              backgroundColor: activeCategory === cat ? '#4fc3f7' : '#1e1e2f',
-              color: activeCategory === cat ? '#1e1e2f' : '#fff',
-              fontWeight: 'bold'
-            }}
-          >
-            {cat}
-          </button>
-        ))}
+  const Home = () => (
+    <div style={{ fontFamily: 'sans-serif', color: '#1e1e2f' }}>
+      {/* Hero Section */}
+      <div style={{ 
+        background: 'linear-gradient(135deg, #1e1e2f 0%, #2a2a40 100%)', 
+        color: '#fff', 
+        padding: '80px 20px', 
+        textAlign: 'center' 
+      }}>
+        <h1 style={{ fontSize: '3rem', margin: '0 0 15px 0' }}>Welcome to EventlyZone</h1>
+        <p style={{ fontSize: '1.25rem', color: '#b0bec5', maxWidth: '600px', margin: '0 auto 30px auto' }}>
+          Explore upcoming brand productions, professional corporate gatherings, and secure your tickets seamlessly.
+        </p>
+        <Link 
+          to="/dashboard" 
+          style={{ 
+            backgroundColor: '#4fc3f7', 
+            color: '#1e1e2f', 
+            padding: '12px 30px', 
+            borderRadius: '25px', 
+            textDecoration: 'none', 
+            fontWeight: 'bold',
+            fontSize: '1rem',
+            boxShadow: '0 4px 14px rgba(79, 195, 247, 0.4)',
+            display: 'inline-block'
+          }}
+        >
+          Explore Events & Book Now
+        </Link>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginTop: '30px' }}>
-        {events
-          .filter((event) => activeCategory === "All" || event.category === activeCategory)
-          .map((event) => (
-            <EventCard key={event._id} event={event} />
-          ))}
+      {/* Features / Highlights Section */}
+      <div style={{ padding: '60px 20px', maxWidth: '1000px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px', textAlign: 'center' }}>
+        <div style={{ padding: '25px', borderRadius: '12px', background: '#f8f9fa', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+          <h3 style={{ color: '#0288d1', marginBottom: '10px' }}>🎬 Brand Productions</h3>
+          <p style={{ color: '#555', fontSize: '14px' }}>Top-tier corporate events, social functions, and exclusive tech productions curated by EventlyZone.</p>
+        </div>
+        <div style={{ padding: '25px', borderRadius: '12px', background: '#f8f9fa', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+          <h3 style={{ color: '#0288d1', marginBottom: '10px' }}>⚡ Instant Booking</h3>
+          <p style={{ color: '#555', fontSize: '14px' }}>Real-time seat tracking and quick registration for both free and paid event entries.</p>
+        </div>
+        <div style={{ padding: '25px', borderRadius: '12px', background: '#f8f9fa', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+          <h3 style={{ color: '#0288d1', marginBottom: '10px' }}>🔒 Secure Management</h3>
+          <p style={{ color: '#555', fontSize: '14px' }}>Dedicated dashboards for admins to manage events and users to keep track of bookings.</p>
+        </div>
       </div>
     </div>
   );
@@ -78,7 +60,8 @@ function App() {
       <div>
         <Navbar />
         <Routes>
-          <Route path="/" element={<HomeDashboard />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/create-event" element={<CreateEvent />} />
         </Routes>

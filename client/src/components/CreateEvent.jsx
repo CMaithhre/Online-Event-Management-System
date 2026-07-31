@@ -1,115 +1,54 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 function CreateEvent() {
   const [formData, setFormData] = useState({
     title: '',
     date: '',
     location: '',
-    capacity: '',
+    category: 'Corporate',
+    price: '',
+    seats: '',
+    image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=400',
     description: ''
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Event created successfully!");
-    setFormData({ title: '', date: '', location: '', capacity: '', description: '' });
+    try {
+      await axios.post('http://localhost:5000/api/events', formData);
+      alert("Event created successfully!");
+      setFormData({ title: '', date: '', location: '', category: 'Corporate', price: '', seats: '', image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=400', description: '' });
+    } catch (err) {
+      console.error("Error creating event:", err);
+      alert("Failed to create event.");
+    }
   };
 
   return (
     <div style={{ padding: '40px', fontFamily: 'sans-serif', maxWidth: '600px', margin: '0 auto' }}>
-      <h2 style={{ color: '#1e1e2f', borderBottom: '2px solid #4fc3f7', paddingBottom: '10px' }}>
-        Create Event Workspace
-      </h2>
-      
+      <h2 style={{ color: '#1e1e2f', borderBottom: '2px solid #4fc3f7', paddingBottom: '10px' }}>Create Event Workspace</h2>
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '20px' }}>
+        <input type="text" name="title" placeholder="Event Name" value={formData.title} onChange={handleChange} style={{ padding: '10px' }} required />
+        <input type="date" name="date" value={formData.date} onChange={handleChange} style={{ padding: '10px' }} required />
+        <input type="text" name="location" placeholder="Location" value={formData.location} onChange={handleChange} style={{ padding: '10px' }} required />
         
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label style={{ fontWeight: 'bold', color: '#333' }}>Event Name:</label>
-          <input 
-            type="text" 
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            placeholder="e.g., Brand Strategy Session" 
-            style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
-            required
-          />
-        </div>
+        {/* Category Dropdown Selector */}
+        <select name="category" value={formData.category} onChange={handleChange} style={{ padding: '10px' }} required>
+          <option value="Corporate">Corporate</option>
+          <option value="Social">Social</option>
+          <option value="Tech">Tech</option>
+        </select>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label style={{ fontWeight: 'bold', color: '#333' }}>Date:</label>
-          <input 
-            type="date" 
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
-            required
-          />
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label style={{ fontWeight: 'bold', color: '#333' }}>Location / Venue:</label>
-          <input 
-            type="text" 
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-            placeholder="e.g., Chittoor Conference Suite" 
-            style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
-            required
-          />
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label style={{ fontWeight: 'bold', color: '#333' }}>Ticket Capacity Limit:</label>
-          <input 
-            type="number" 
-            name="capacity"
-            value={formData.capacity}
-            onChange={handleChange}
-            placeholder="e.g., 150" 
-            style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
-            required
-          />
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label style={{ fontWeight: 'bold', color: '#333' }}>Event Description:</label>
-          <textarea 
-            rows="4"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            placeholder="Describe the goals and schedule of this production..." 
-            style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc', resize: 'vertical' }}
-            required
-          />
-        </div>
-
-        <button 
-          type="submit"
-          style={{
-            padding: '12px',
-            backgroundColor: '#1e1e2f',
-            color: '#fff',
-            fontWeight: 'bold',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            marginTop: '10px'
-          }}
-        >
-          Publish Production Launch
-        </button>
+        <input type="number" name="seats" placeholder="No. of Seats" value={formData.seats} onChange={handleChange} style={{ padding: '10px' }} required />
+        <input type="number" name="price" placeholder="Price per Seat" value={formData.price} onChange={handleChange} style={{ padding: '10px' }} required />
+        <textarea name="description" placeholder="Event Description" value={formData.description} onChange={handleChange} style={{ padding: '10px' }} required />
+        <button type="submit" style={{ padding: '12px', backgroundColor: '#1e1e2f', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Publish EventlyZone Launch</button>
       </form>
     </div>
   );
