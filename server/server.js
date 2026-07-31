@@ -15,6 +15,11 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch((err) => console.error('Could not connect to MongoDB', err));
 
+// --- ROOT ROUTE ---
+app.get('/', (req, res) => {
+  res.send('Online Event Management System API is running!');
+});
+
 // --- EVENT ROUTES ---
 
 // GET all events (Accessible to attendees and organizers)
