@@ -214,10 +214,23 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(400).json({ message: "Selected role does not match this account." });
     }
 
-    res.status(200).json({ message: "Login successful", role: user.role });
+    // FIXED: Corrected token string interpolation syntax
+    res.status(200).json({ 
+      message: "Login successful", 
+      role: user.role,
+      token: "mock_jwt_token_" + Math.random().toString(36).substring(2)
+    });
   } catch (err) {
     res.status(500).json({ message: "Server error during login" });
   }
 });
+
+// Export app directly for server setups that require it (e.g. index.js / bin/www)
+const PORT = process.env.PORT || 5000;
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 
 module.exports = app;
