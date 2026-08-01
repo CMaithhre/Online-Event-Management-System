@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 // Collections of multiple professional images for each category
 const categoryImages = {
   tech: [
@@ -56,7 +58,7 @@ function EventCard({ event, onDelete, onUpdateClick }) {
     if (window.confirm("Are you sure you want to delete this event?")) {
       try {
         const eventId = event._id || event.id;
-        await axios.delete(`http://localhost:5000/api/events/${eventId}`);
+        await axios.delete(`${API_URL}/api/events/${eventId}`);
         if (onDelete) onDelete();
       } catch (err) {
         console.error("Error deleting event:", err);
@@ -82,11 +84,11 @@ function EventCard({ event, onDelete, onUpdateClick }) {
       const rawPrice = event?.price ? event.price.toString().replace(/[^\d]/g, '') : '0';
       const priceAmount = parseInt(rawPrice) || 0;
 
-      await axios.post('http://localhost:5000/api/payment/create-order', {
+      await axios.post(`${API_URL}/api/payment/create-order`, {
         amount: priceAmount
       });
 
-      const verifyRes = await axios.post('http://localhost:5000/api/payment/verify', {
+      await axios.post(`${API_URL}/api/payment/verify`, {
         eventId: eventId
       });
 
@@ -176,7 +178,7 @@ function Dashboard() {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/events');
+      const response = await axios.get(`${API_URL}/api/events`);
       setEvents(response.data);
       setLoading(false);
     } catch (err) {
@@ -210,7 +212,7 @@ function Dashboard() {
     e.preventDefault();
     try {
       const eventId = editingEvent._id || editingEvent.id;
-      const res = await axios.put(`http://localhost:5000/api/events/${eventId}`, formData);
+      const res = await axios.put(`${API_URL}/api/events/${eventId}`, formData);
       
       setEvents(prevEvents => prevEvents.map(ev => ((ev._id || ev.id) === eventId ? res.data.updatedEvent : ev)));
       setEditingEvent(null);

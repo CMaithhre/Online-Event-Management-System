@@ -21,7 +21,8 @@ function CreateEvent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/events', formData);
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      await axios.post(`${API_URL}/api/events`, formData);
       alert("Event created successfully!");
       setFormData({ title: '', date: '', location: '', category: 'Corporate', price: '', seats: '', image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=400', description: '' });
     } catch (err) {
